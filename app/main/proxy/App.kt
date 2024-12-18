@@ -1,4 +1,4 @@
-package aap.arena.hendelse.proxy
+package proxy
 
 import proxy.kafka.HendelseApiProducer
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -17,12 +17,12 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
-import proxy.Config
 import proxy.hendelse.hendelse
 
 
 val logger: Logger = LoggerFactory.getLogger("App")
 
+class App
 
 fun main() {
 
