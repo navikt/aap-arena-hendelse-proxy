@@ -1,0 +1,80 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: innsending
+  namespace: aap
+  labels:
+    team: aap
+    sub: innsending
+spec:
+  image: {{image}}
+  replicas:
+    min: 2
+    max: 4
+    scalingStrategy:
+      cpu:
+        thresholdPercentage: 80
+  azure:
+    application:
+      enabled: true
+  tokenx:
+    enabled: true
+  kafka:
+    pool: nav-prod
+  resources:
+    limits:
+      memory: 2048Mi
+    requests:
+      memory: 2048Mi
+  accessPolicy:
+    inbound:
+      rules:
+        - application: innsyn
+        - application: soknad
+        - application: tms-utkast
+          namespace: min-side
+          cluster: prod-gcp
+    outbound:
+      external:
+        - host: dokarkiv.prod-fss-pub.nais.io
+      rules:
+        - application: pdfgen
+        - application: oppslag
+        - application: clamav
+          namespace: nais-system
+  redis:
+    - instance: mellomlager
+      access: readwrite
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_16
+        tier: db-custom-1-3840
+        diskAutoresize: true
+        highAvailability: true
+        pointInTimeRecovery: true
+        databases:
+          - name: innsending
+  liveness:
+    path: /actuator/live
+  readiness:
+    path: /actuator/ready
+  prometheus:
+    enabled: true
+    path: /actuator/metrics
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: "java"
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
+  secureLogs:
+    enabled: true
+  env:
+    - name: JOARK_BASE_URL
+      value: https://dokarkiv.prod-fss-pub.nais.io
+    - name: JOARK_SCOPE
+      value: api://prod-fss.teamdokumenthandtering.dokarkiv/.default
+    - name: OPPSLAG_SCOPE
+      value: api://prod-gcp.aap.oppslag/.default

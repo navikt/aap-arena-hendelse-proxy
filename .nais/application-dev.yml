@@ -1,0 +1,85 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: innsending
+  namespace: aap
+  labels:
+    team: aap
+    sub: innsending
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "90"
+spec:
+  image: {{image}}
+  ingresses:
+    - https://aap-innsending.intern.dev.nav.no
+  replicas:
+    min: 2
+    max: 4
+    scalingStrategy:
+      cpu:
+        thresholdPercentage: 80
+  azure:
+    application:
+      enabled: true
+  tokenx:
+    enabled: true
+  kafka:
+    pool: nav-dev
+  resources:
+    limits:
+      memory: 1024Mi
+    requests:
+      memory: 1024Mi
+  accessPolicy:
+    inbound:
+      rules:
+        - application: innsyn
+        - application: soknad
+        - application: tms-utkast
+          namespace: min-side
+          cluster: dev-gcp
+    outbound:
+      external:
+        - host: dokarkiv.dev-fss-pub.nais.io
+      rules:
+        - application: pdfgen
+        - application: oppslag
+        - application: clamav
+          namespace: nais-system
+  redis:
+    - instance: mellomlager
+      access: readwrite
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_16
+        tier: db-custom-1-3840
+        diskAutoresize: true
+        highAvailability: true
+        pointInTimeRecovery: true
+        databases:
+          - name: innsending
+  liveness:
+    path: /actuator/live
+  readiness:
+    path: /actuator/ready
+  prometheus:
+    enabled: true
+    path: /actuator/metrics
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: "java"
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
+  secureLogs:
+    enabled: true
+  env:
+    - name: JOARK_BASE_URL
+      value: https://dokarkiv-q2.dev-fss-pub.nais.io
+    - name: JOARK_SCOPE
+      value: api://dev-fss.teamdokumenthandtering.dokarkiv/.default
+    - name: OPPSLAG_SCOPE
+      value: api://dev-gcp.aap.oppslag/.default
