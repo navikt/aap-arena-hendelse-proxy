@@ -39,7 +39,7 @@ jobs:
     secrets: inherit
     with:
       cluster: dev-gcp
-      manifest: .nais/application-dev.yaml
+      manifest: .nais/application-dev.yml
 
   prod:
     if: false # github.event.pull_request.merged || github.event_name == 'push' || github.event.inputs.cluster == 'dev-gcp'
@@ -51,4 +51,4 @@ jobs:
     secrets: inherit
     with:
       cluster: prod-gcp
-      manifest: .nais/application-dev.yaml
+      manifest: .nais/application-dev.yml
