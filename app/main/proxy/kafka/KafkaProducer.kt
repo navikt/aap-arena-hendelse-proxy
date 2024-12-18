@@ -1,6 +1,4 @@
-package aap.arena.hendelse.kafka
-
-import proxy.kafka.HendelseInput
+package proxy.kafka
 
 interface KafkaProducer: AutoCloseable {
     fun produce(input: HendelseInput)

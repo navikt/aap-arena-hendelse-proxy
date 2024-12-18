@@ -1,6 +1,6 @@
 package proxy.hendelse
 
-import aap.arena.hendelse.kafka.HendelseApiProducer
+import proxy.kafka.HendelseApiProducer
 import io.ktor.server.request.*
 import io.ktor.server.routing.*
 import proxy.kafka.HendelseInput

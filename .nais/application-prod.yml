@@ -5,11 +5,11 @@ metadata:
   namespace: aap
   labels:
     team: aap
-    sub: innsending
+    sub: arena-hendelse-proxy
 spec:
   image: {{image}}
   ingresses:
-    - https://aap-arena-hendelse-proxy.intern.dev.nav.no
+    - https://aap-arena-hendelse-proxy.intern.nav.no
   replicas:
     min: 2
     max: 4

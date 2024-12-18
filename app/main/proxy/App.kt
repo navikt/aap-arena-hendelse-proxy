@@ -1,7 +1,6 @@
 package aap.arena.hendelse.proxy
 
-import aap.arena.hendelse.kafka.HendelseApiProducer
-import aap.arena.hendelse.kafka.KafkaProducer
+import proxy.kafka.HendelseApiProducer
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.http.*
@@ -31,7 +30,7 @@ fun main() {
 
 fun Application.server(
     config: Config,
-    hendelseProducer:HendelseApiProducer = HendelseApiProducer(config.kafka),
+    hendelseProducer: HendelseApiProducer = HendelseApiProducer(config.kafka),
 ){
     install(CallLogging) {
         level = Level.TRACE

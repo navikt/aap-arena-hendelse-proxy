@@ -5,7 +5,7 @@ metadata:
   namespace: aap
   labels:
     team: aap
-    sub: innsending
+    sub: arena-hendelse-proxy
 spec:
   image: {{image}}
   ingresses:

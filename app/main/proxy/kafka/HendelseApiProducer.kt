@@ -1,11 +1,12 @@
-package aap.arena.hendelse.kafka
+package proxy.kafka
 
-import aap.arena.hendelse.proxy.logger
 import libs.kafka.KafkaConfig
 import libs.kafka.KafkaFactory
 import org.apache.kafka.clients.producer.ProducerRecord
-import proxy.kafka.HendelseInput
+import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
+
+private val logger = LoggerFactory.getLogger(HendelseApiProducer::class.java)
 
 class HendelseApiProducer(config: KafkaConfig) : KafkaProducer, AutoCloseable {
     private val producer = KafkaFactory.createProducer("arena-hendelse-api-proxy", config)
@@ -18,7 +19,7 @@ class HendelseApiProducer(config: KafkaConfig) : KafkaProducer, AutoCloseable {
                 logger.error("Fikk ikke varslet hendelse for ${input.identifikator}", err)
                 throw KafkaProducerException("Fikk ikke varslet hendelse for $${input.identifikator}")
             } else {
-                logger.debug("Varslet hendelse for $${input.identifikator}: $metadata")
+                logger.debug("Varslet hendelse for \${}: {}", input.identifikator, metadata)
             }
         }.get() // Blocking call to ensure the message is sent
     }
