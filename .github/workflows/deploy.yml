@@ -61,6 +61,6 @@ jobs:
       - uses: nais/deploy/actions/deploy@v2
         env:
           PRINT_PAYLOAD: true
-          CLUSTER: dev-gcp
+          CLUSTER: dev-fss
           RESOURCE: .nais/application-dev.yml
           VAR: image=${{ needs.build.outputs.image }}
