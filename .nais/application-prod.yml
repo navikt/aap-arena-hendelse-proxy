@@ -1,13 +1,15 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: innsending
+  name: arena-hendelse-proxy
   namespace: aap
   labels:
     team: aap
     sub: innsending
 spec:
   image: {{image}}
+  ingresses:
+    - https://aap-arena-hendelse-proxy.intern.dev.nav.no
   replicas:
     min: 2
     max: 4
@@ -17,43 +19,17 @@ spec:
   azure:
     application:
       enabled: true
-  tokenx:
-    enabled: true
   kafka:
     pool: nav-prod
   resources:
     limits:
-      memory: 2048Mi
+      memory: 512Mi
     requests:
-      memory: 2048Mi
+      memory: 512Mi
   accessPolicy:
     inbound:
       rules:
-        - application: innsyn
-        - application: soknad
-        - application: tms-utkast
-          namespace: min-side
-          cluster: prod-gcp
-    outbound:
-      external:
-        - host: dokarkiv.prod-fss-pub.nais.io
-      rules:
-        - application: pdfgen
-        - application: oppslag
-        - application: clamav
-          namespace: nais-system
-  redis:
-    - instance: mellomlager
-      access: readwrite
-  gcp:
-    sqlInstances:
-      - type: POSTGRES_16
-        tier: db-custom-1-3840
-        diskAutoresize: true
-        highAvailability: true
-        pointInTimeRecovery: true
-        databases:
-          - name: innsending
+        - application: arena
   liveness:
     path: /actuator/live
   readiness:
@@ -71,10 +47,3 @@ spec:
         - id: loki
   secureLogs:
     enabled: true
-  env:
-    - name: JOARK_BASE_URL
-      value: https://dokarkiv.prod-fss-pub.nais.io
-    - name: JOARK_SCOPE
-      value: api://prod-fss.teamdokumenthandtering.dokarkiv/.default
-    - name: OPPSLAG_SCOPE
-      value: api://prod-gcp.aap.oppslag/.default
