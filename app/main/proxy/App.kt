@@ -14,6 +14,8 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.micrometer.prometheusmetrics.PrometheusConfig
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.slf4j.Logger
@@ -32,6 +34,8 @@ fun Application.server(
     config: Config = Config(),
     hendelseProducer: HendelseApiProducer = HendelseApiProducer(config.kafka),
 ) {
+    val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
+
     install(CallLogging) {
         level = Level.TRACE
         format { call ->
@@ -69,6 +73,7 @@ fun Application.server(
 
     routing {
         hendelse(hendelseProducer)
+        actuator(prometheus = prometheus)
     }
 
 }
