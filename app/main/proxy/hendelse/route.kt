@@ -1,13 +1,24 @@
 package proxy.hendelse
 
+import com.papsign.ktor.openapigen.route.path.normal.NormalOpenAPIRoute
+import com.papsign.ktor.openapigen.route.path.normal.post
+import com.papsign.ktor.openapigen.route.route
+import io.ktor.http.*
 import proxy.kafka.HendelseApiProducer
-import io.ktor.server.request.*
-import io.ktor.server.routing.*
 import proxy.kafka.HendelseInput
 
-fun Route.hendelse(hendelseApiProducer: HendelseApiProducer){
-    post("/hendelse") {
-        val input = call.receive<HendelseInput>()
-        hendelseApiProducer.produce(input)
+fun NormalOpenAPIRoute.hendelse(
+    hendelseApiProducer: HendelseApiProducer
+) {
+    route("/hendelse") {
+        post<Unit, String, HendelseInput> { _, input ->
+
+            hendelseApiProducer.produce(input)
+
+            responder.respond(
+                HttpStatusCode.Accepted, "{}", pipeline
+            )
+        }
     }
+
 }
