@@ -6,6 +6,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
@@ -19,19 +21,17 @@ import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import proxy.hendelse.hendelse
 
-
 val logger: Logger = LoggerFactory.getLogger("App")
 
-class App
-
 fun main() {
-
+    Thread.setDefaultUncaughtExceptionHandler { thread, throwable -> logger.error("Uhåndtert feil", throwable)}
+    embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
 fun Application.server(
-    config: Config,
+    config: Config = Config(),
     hendelseProducer: HendelseApiProducer = HendelseApiProducer(config.kafka),
-){
+) {
     install(CallLogging) {
         level = Level.TRACE
         format { call ->
