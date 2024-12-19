@@ -10,7 +10,7 @@ private val logger = LoggerFactory.getLogger(HendelseApiProducer::class.java)
 
 class HendelseApiProducer(config: KafkaConfig) : KafkaProducer, AutoCloseable {
     private val producer = KafkaFactory.createProducer("arena-hendelse-api-proxy", config)
-    private val topic = ""
+    private val topic = "pensjonsamhandling.sam-vedtak-hendelser-q2"
 
     override fun produce(input: HendelseInput) {
         val record = createRecord(input)
