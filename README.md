@@ -1,5 +1,5 @@
 # aap-arena-hendelse-proxy
-Applikasjon for å håndtere hendelser fra arena som skal videre inn til felles samhandlingsApi.
+Applikasjon for å håndtere hendelser fra Arena som skal videre inn til felles samhandlingsApi.
 
 # Komme i gang
 Bruker gradle wrapper, så bare klon og kjør `./gradlew build`
