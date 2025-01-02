@@ -8,9 +8,8 @@ import java.time.LocalDateTime
 
 private val logger = LoggerFactory.getLogger(HendelseApiProducer::class.java)
 
-class HendelseApiProducer(config: KafkaConfig) : KafkaProducer, AutoCloseable {
+class HendelseApiProducer(config: KafkaConfig, private val topic: String) : KafkaProducer, AutoCloseable {
     private val producer = KafkaFactory.createProducer("arena-hendelse-api-proxy", config)
-    private val topic = "pensjonsamhandling.sam-vedtak-hendelser-q2"
 
     override fun produce(input: HendelseInput) {
         val record = createRecord(input)

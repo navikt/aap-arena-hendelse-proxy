@@ -33,7 +33,7 @@ fun main() {
 
 fun Application.server(
     config: Config = Config(),
-    hendelseProducer: HendelseApiProducer = HendelseApiProducer(config.kafka),
+    hendelseProducer: HendelseApiProducer = HendelseApiProducer(config.kafka, config.topicConfig),
 ) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 

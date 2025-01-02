@@ -21,4 +21,5 @@ data class Config(
         keystorePath = getEnvVar("KAFKA_KEYSTORE_PATH"),
         credstorePsw = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
     ),
+    val topicConfig: String = getEnvVar("HENDELSE_TOPIC"),
 )
