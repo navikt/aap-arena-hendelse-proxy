@@ -32,7 +32,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.14.2")
 
 
-    implementation("ch.qos.logback:logback-classic:1.5.15")
+    implementation("ch.qos.logback:logback-classic:1.5.16")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:8.0")
 
     testImplementation(kotlin("test"))
