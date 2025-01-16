@@ -6,7 +6,7 @@ interface KafkaProducer: AutoCloseable {
 
 class SamHendelse(
     val tpNr: String,
-    val ytelsesType: String,
+    val ytelsesType: String = "AAP",
     val identifikator: String,
     val vedtakId: String,
     var samId: String? = null,

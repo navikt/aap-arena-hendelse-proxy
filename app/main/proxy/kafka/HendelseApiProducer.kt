@@ -26,7 +26,6 @@ class HendelseApiProducer(config: KafkaConfig, private val topic: String) : Kafk
     private fun createRecord(input: HendelseInput): ProducerRecord<String, String> {
         val json = SamHendelse(
             tpNr = input.tpNr,
-            ytelsesType = input.ytelsesType,
             identifikator= input.identifikator,
             vedtakId = input.vedtakId,
             fom = LocalDateTime.now().toString(),
