@@ -30,6 +30,8 @@ spec:
     inbound:
       rules:
         - application: arena
+          namespace: teamarenanais
+          cluster: dev-fss
   liveness:
     path: /actuator/live
   readiness:
