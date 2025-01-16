@@ -6,15 +6,17 @@ import com.papsign.ktor.openapigen.route.route
 import io.ktor.http.*
 import proxy.kafka.HendelseApiProducer
 import proxy.kafka.HendelseInput
+import proxy.kafka.HendelseInputFlereTpNr
 
 fun NormalOpenAPIRoute.hendelse(
     hendelseApiProducer: HendelseApiProducer
 ) {
     route("/hendelse") {
-        post<Unit, String, HendelseInput> { _, input ->
+        post<Unit, String, HendelseInputFlereTpNr> { _, input ->
 
-            hendelseApiProducer.produce(input)
-
+            input.tpNr.forEach {tpNr ->
+                hendelseApiProducer.produce(HendelseInput(tpNr, input.identifikator, input.vedtakId))
+            }
             responder.respond(
                 HttpStatusCode.Accepted, "{}", pipeline
             )
