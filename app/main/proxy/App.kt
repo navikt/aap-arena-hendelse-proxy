@@ -39,7 +39,7 @@ fun Application.server(
 
     commonKtorModule(
         prometheus = prometheus,
-        azureConfig = null,
+        azureConfig = config.azure,
         infoModel = InfoModel(
             title = "AAP Arena HendelseProxy",
         ),
