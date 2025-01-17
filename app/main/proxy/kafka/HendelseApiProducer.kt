@@ -2,6 +2,7 @@ package proxy.kafka
 
 import libs.kafka.KafkaConfig
 import libs.kafka.KafkaFactory
+import no.nav.aap.komponenter.json.DefaultJsonMapper
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
@@ -24,14 +25,15 @@ class HendelseApiProducer(config: KafkaConfig, private val topic: String) : Kafk
     }
 
     private fun createRecord(input: HendelseInput): ProducerRecord<String, String> {
-        val json = SamHendelse(
+        val samHendelse = SamHendelse(
             tpNr = input.tpNr,
             identifikator= input.identifikator,
             vedtakId = input.vedtakId,
             fom = LocalDateTime.now().toString(),
-        ).toString()
+        )
+        val jsonSomString = DefaultJsonMapper.toJson(samHendelse)
 
-        return ProducerRecord(topic, input.identifikator, json)
+        return ProducerRecord(topic, input.identifikator, jsonSomString)
     }
 
     override fun close() = producer.close()
