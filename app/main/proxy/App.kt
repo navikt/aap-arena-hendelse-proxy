@@ -4,6 +4,7 @@ import com.papsign.ktor.openapigen.model.info.InfoModel
 import com.papsign.ktor.openapigen.route.apiRouting
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.statuspages.*
@@ -13,6 +14,7 @@ import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import no.nav.aap.komponenter.server.AZURE
 import no.nav.aap.komponenter.server.commonKtorModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -65,8 +67,10 @@ fun Application.server(
     }
 
     routing {
-        apiRouting {
-            hendelse(hendelseProducer)
+        authenticate(AZURE) {
+            apiRouting {
+                hendelse(hendelseProducer)
+            }
         }
         actuator(prometheus = prometheus)
     }
