@@ -7,7 +7,7 @@ plugins {
 }
 
 val aapLibVersion = "5.0.25"
-val komponenterVersjon = "1.0.114"
+val komponenterVersjon = "1.0.118"
 val ktorVersion = "3.0.3"
 
 repositories {
