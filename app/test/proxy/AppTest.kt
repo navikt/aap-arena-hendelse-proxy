@@ -5,12 +5,9 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import proxy.Config
 import proxy.kafka.HendelseInput
 import proxy.kafka.HendelseProducer
-import proxy.server
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 class AppTest {
     companion object {

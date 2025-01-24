@@ -4,15 +4,15 @@ import com.papsign.ktor.openapigen.annotations.properties.description.Descriptio
 import java.time.LocalDate
 
 data class HendelseInputFlereTpNr(
-    @Description("Liste av TP-nummer.")
+    @property:Description("Liste av TP-nummer.")
     val tpNr: List<String>,
-    @Description("Fødselsnummer.")
+    @property:Description("Fødselsnummer.")
     val identifikator: String,
-    @Description("Vedtak-ID.")
+    @property:Description("Vedtak-ID.")
     val vedtakId: String,
-    @Description("Fra-dato for vedtakets virkningsperiode.")
+    @property:Description("Fra-dato for vedtakets virkningsperiode.")
     val fom: LocalDate,
-    @Description("Til-dato for vedtakets virkningsperiode. Null om vedtaket fortsatt er aktivt.")
+    @property:Description("Til-dato for vedtakets virkningsperiode. Null om vedtaket fortsatt er aktivt.")
     val tom: LocalDate? = null
 )
 
