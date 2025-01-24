@@ -1,15 +1,19 @@
 package proxy.kafka
 
-import libs.kafka.KafkaConfig
-import libs.kafka.KafkaFactory
 import no.nav.aap.komponenter.json.DefaultJsonMapper
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.LoggerFactory
 import java.time.LocalDateTime
 
-private val logger = LoggerFactory.getLogger(HendelseApiProducer::class.java)
+private val logger = LoggerFactory.getLogger(HendelseApiKafkaProducer::class.java)
 
-class HendelseApiProducer(config: KafkaConfig, private val topic: String) : KafkaProducer, AutoCloseable {
+interface HendelseProducer : KafkaProducer, AutoCloseable {
+    override fun produce(input: HendelseInput)
+
+    override fun close()
+}
+
+class HendelseApiKafkaProducer(config: KafkaConfig, private val topic: String) : HendelseProducer {
     private val producer = KafkaFactory.createProducer("arena-hendelse-api-proxy", config)
 
     override fun produce(input: HendelseInput) {

@@ -6,7 +6,6 @@ plugins {
     application
 }
 
-val aapLibVersion = "5.0.25"
 val komponenterVersjon = "1.0.118"
 val ktorVersion = "3.0.3"
 
@@ -20,12 +19,12 @@ application {
 }
 
 dependencies {
-    implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
     implementation("org.apache.kafka:kafka-clients:3.9.0")
 
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("no.nav.aap.kelvin:server:$komponenterVersjon")
+    implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
 
@@ -37,6 +36,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
 
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("org.assertj:assertj-core:3.27.3")
 }
 

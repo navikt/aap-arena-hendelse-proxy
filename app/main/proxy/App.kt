@@ -19,7 +19,8 @@ import no.nav.aap.komponenter.server.commonKtorModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import proxy.hendelse.hendelse
-import proxy.kafka.HendelseApiProducer
+import proxy.kafka.HendelseApiKafkaProducer
+import proxy.kafka.HendelseProducer
 
 val logger: Logger = LoggerFactory.getLogger("App")
 
@@ -30,12 +31,18 @@ fun main() {
             throwable
         )
     }
-    embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
+    val config = Config()
+    embeddedServer(Netty, port = 8080) {
+        server(
+            config,
+            HendelseApiKafkaProducer(config.kafka, config.topicConfig),
+        )
+    }.start(wait = true)
 }
 
 fun Application.server(
-    config: Config = Config(),
-    hendelseProducer: HendelseApiProducer = HendelseApiProducer(config.kafka, config.topicConfig),
+    config: Config,
+    hendelseProducer: HendelseProducer
 ) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 

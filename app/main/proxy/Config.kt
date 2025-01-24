@@ -1,18 +1,16 @@
 package proxy
 
-import libs.kafka.KafkaConfig
+import no.nav.aap.komponenter.config.requiredConfigForKey
 import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.AzureConfig
-
-private fun getEnvVar(envar: String) = System.getenv(envar) ?: error("missing envvar $envar")
-
+import proxy.kafka.KafkaConfig
 
 data class Config(
     val azure: AzureConfig = AzureConfig(),
     val kafka: KafkaConfig = KafkaConfig(
-        brokers = getEnvVar("KAFKA_BROKERS"),
-        truststorePath = getEnvVar("KAFKA_TRUSTSTORE_PATH"),
-        keystorePath = getEnvVar("KAFKA_KEYSTORE_PATH"),
-        credstorePsw = getEnvVar("KAFKA_CREDSTORE_PASSWORD"),
+        brokers = requiredConfigForKey("kafka.brokers"),
+        truststorePath = requiredConfigForKey("kafka.truststore.path"),
+        keystorePath = requiredConfigForKey("kafka.keystore.path"),
+        credstorePsw = requiredConfigForKey("kafka.credstore.password"),
     ),
-    val topicConfig: String = getEnvVar("HENDELSE_TOPIC"),
+    val topicConfig: String = requiredConfigForKey("hendelse.topic"),
 )

@@ -5,12 +5,13 @@ import com.papsign.ktor.openapigen.route.path.normal.post
 import com.papsign.ktor.openapigen.route.route
 import com.papsign.ktor.openapigen.route.status
 import io.ktor.http.*
-import proxy.kafka.HendelseApiProducer
+import proxy.kafka.HendelseApiKafkaProducer
 import proxy.kafka.HendelseInput
 import proxy.kafka.HendelseInputFlereTpNr
+import proxy.kafka.HendelseProducer
 
 fun NormalOpenAPIRoute.hendelse(
-    hendelseApiProducer: HendelseApiProducer
+    hendelseApiProducer: HendelseProducer
 ) {
     route("/hendelse").status(202) {
         post<Unit, String, HendelseInputFlereTpNr> { _, input ->
