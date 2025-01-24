@@ -12,7 +12,7 @@ data class HendelseInputFlereTpNr(
     val vedtakId: String,
     @property:Description("Fra-dato for vedtakets virkningsperiode.")
     val fom: LocalDate,
-    @property:Description("Til-dato for vedtakets virkningsperiode. Null om vedtaket fortsatt er aktivt.")
+    @property:Description("Til-dato for vedtakets virkningsperiode. Kan være null fra Arena.")
     val tom: LocalDate? = null
 )
 
