@@ -21,7 +21,9 @@ fun NormalOpenAPIRoute.hendelse(
                     HendelseInput(
                         tpNr,
                         input.identifikator,
-                        input.vedtakId
+                        input.vedtakId,
+                        input.fom,
+                        input.tom,
                     )
                 )
             }

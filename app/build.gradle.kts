@@ -8,6 +8,7 @@ plugins {
 
 val komponenterVersjon = "1.0.118"
 val ktorVersion = "3.0.3"
+val mockOAuth2ServerVersion = "2.1.10"
 
 repositories {
     mavenCentral()
@@ -37,6 +38,8 @@ dependencies {
     testImplementation(kotlin("test"))
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
     testImplementation("org.assertj:assertj-core:3.27.3")
 }
 

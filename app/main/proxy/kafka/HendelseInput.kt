@@ -19,5 +19,7 @@ data class HendelseInputFlereTpNr(
 data class HendelseInput(
     val tpNr: String,
     val identifikator: String,
-    val vedtakId: String
+    val vedtakId: String,
+    val fom: LocalDate,
+    val tom: LocalDate? = null
 )
