@@ -3,6 +3,8 @@ package proxy.kafka
 import no.nav.aap.komponenter.json.DefaultJsonMapper
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.LoggerFactory
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 
 private val logger = LoggerFactory.getLogger(HendelseApiKafkaProducer::class.java)
 
@@ -14,7 +16,7 @@ interface HendelseProducer : KafkaProducer, AutoCloseable {
 
 class HendelseApiKafkaProducer(config: KafkaConfig, private val topic: String) : HendelseProducer {
     private val producer = KafkaFactory.createProducer("arena-hendelse-api-proxy", config)
-
+    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     override fun produce(input: HendelseInput) {
         val record = createRecord(input)
         producer.send(record) { metadata, err ->
@@ -28,12 +30,13 @@ class HendelseApiKafkaProducer(config: KafkaConfig, private val topic: String) :
     }
 
     private fun createRecord(input: HendelseInput): ProducerRecord<String, String> {
+
         val samHendelse = SamHendelse(
             tpNr = input.tpNr,
             identifikator = input.identifikator,
             vedtakId = input.vedtakId,
-            fom = input.fom.toString(),
-            tom = input.tom?.toString()
+            fom = input.fom.format(dateFormatter),
+            tom = input.tom?.format(dateFormatter)
         )
         val jsonSomString = DefaultJsonMapper.toJson(samHendelse)
 
