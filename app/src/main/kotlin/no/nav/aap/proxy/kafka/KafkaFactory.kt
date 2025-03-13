@@ -1,4 +1,4 @@
-package proxy.kafka
+package no.nav.aap.proxy.kafka
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.producer.KafkaProducer

@@ -1,4 +1,4 @@
-package proxy.kafka
+package no.nav.aap.proxy.kafka
 
 import com.papsign.ktor.openapigen.annotations.properties.description.Description
 import java.time.LocalDate

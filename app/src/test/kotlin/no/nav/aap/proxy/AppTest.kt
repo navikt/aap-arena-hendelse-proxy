@@ -1,4 +1,4 @@
-package proxy
+package no.nav.aap.proxy
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
@@ -7,16 +7,16 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.testing.*
+import no.nav.aap.proxy.kafka.HendelseInput
+import no.nav.aap.proxy.kafka.HendelseInputFlereTpNr
+import no.nav.aap.proxy.kafka.HendelseProducer
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
-import proxy.kafka.HendelseInput
-import proxy.kafka.HendelseInputFlereTpNr
-import proxy.kafka.HendelseProducer
+import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import kotlin.test.Test
 
 class AppTest {
     companion object {

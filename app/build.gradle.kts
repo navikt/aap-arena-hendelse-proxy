@@ -1,7 +1,10 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 
 plugins {
-    kotlin("jvm") version "2.1.10"
+    id("aap-hendelse-proxy.conventions")
+    kotlin("jvm")
     id("io.ktor.plugin") version "3.1.1"
     application
 }
@@ -16,7 +19,7 @@ repositories {
 }
 
 application {
-    mainClass.set("proxy.AppKt")
+    mainClass.set("no.nav.aap.proxy.AppKt")
 }
 
 dependencies {
@@ -31,23 +34,20 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.14.5")
 
-
     implementation("ch.qos.logback:logback-classic:1.5.17")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:8.0")
-
-    testImplementation(kotlin("test"))
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
+    constraints {
+        implementation("net.minidev:json-smart:2.5.2")
+    }
     testImplementation("org.assertj:assertj-core:3.27.3")
 }
 
 tasks {
-    withType<Test> {
-        useJUnitPlatform()
-    }
-    withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    withType<ShadowJar> {
         mergeServiceFiles()
     }
 }
@@ -58,13 +58,3 @@ kotlin {
         jvmTarget.set(JvmTarget.JVM_21)
     }
 }
-
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
-}
-
-kotlin.sourceSets["main"].kotlin.srcDirs("main")
-kotlin.sourceSets["test"].kotlin.srcDirs("test")
-sourceSets["main"].resources.srcDirs("main")
-sourceSets["test"].resources.srcDirs("test")

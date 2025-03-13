@@ -1,4 +1,4 @@
-package proxy
+package no.nav.aap.proxy
 
 import com.papsign.ktor.openapigen.model.info.InfoModel
 import com.papsign.ktor.openapigen.route.apiRouting
@@ -18,9 +18,9 @@ import no.nav.aap.komponenter.server.AZURE
 import no.nav.aap.komponenter.server.commonKtorModule
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import proxy.hendelse.hendelse
-import proxy.kafka.HendelseApiKafkaProducer
-import proxy.kafka.HendelseProducer
+import no.nav.aap.proxy.hendelse.hendelse
+import no.nav.aap.proxy.kafka.HendelseApiKafkaProducer
+import no.nav.aap.proxy.kafka.HendelseProducer
 
 val logger: Logger = LoggerFactory.getLogger("App")
 

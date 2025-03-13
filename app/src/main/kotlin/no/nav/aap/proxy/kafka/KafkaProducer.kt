@@ -1,4 +1,4 @@
-package proxy.kafka
+package no.nav.aap.proxy.kafka
 
 interface KafkaProducer: AutoCloseable {
     fun produce(input: HendelseInput)

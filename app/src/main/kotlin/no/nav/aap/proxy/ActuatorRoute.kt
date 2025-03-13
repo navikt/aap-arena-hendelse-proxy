@@ -1,4 +1,4 @@
-package proxy
+package no.nav.aap.proxy
 
 import io.ktor.http.*
 import io.ktor.server.response.*

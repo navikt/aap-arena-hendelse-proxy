@@ -1,8 +1,8 @@
-package proxy
+package no.nav.aap.proxy
 
 import no.nav.aap.komponenter.config.requiredConfigForKey
 import no.nav.aap.komponenter.httpklient.httpclient.tokenprovider.azurecc.AzureConfig
-import proxy.kafka.KafkaConfig
+import no.nav.aap.proxy.kafka.KafkaConfig
 
 data class Config(
     val azure: AzureConfig = AzureConfig(),

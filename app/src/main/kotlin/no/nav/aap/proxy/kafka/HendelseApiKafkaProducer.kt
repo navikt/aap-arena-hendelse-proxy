@@ -1,9 +1,8 @@
-package proxy.kafka
+package no.nav.aap.proxy.kafka
 
 import no.nav.aap.komponenter.json.DefaultJsonMapper
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.LoggerFactory
-import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 
 private val logger = LoggerFactory.getLogger(HendelseApiKafkaProducer::class.java)
