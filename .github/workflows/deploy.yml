@@ -12,8 +12,6 @@ on:
           - dev-gcp
   push:
     branches: [ main ]
-    paths-ignore:
-      - '.github/**'
 
 jobs:
   build:
