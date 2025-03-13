@@ -51,4 +51,4 @@ spec:
     enabled: true
   env:
     - name: HENDELSE_TOPIC
-      value: pensjonsamhandling.sam-vedtak-hendelser-q2
+      value: pensjonsamhandling.sam-vedtak-hendelser-p
