@@ -1,6 +1,8 @@
 package no.nav.aap.proxy.kafka
 
 import no.nav.aap.komponenter.json.DefaultJsonMapper
+import no.nav.aap.proxy.hendelseAvgitt
+import no.nav.aap.proxy.prometheus
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.LoggerFactory
 import java.time.format.DateTimeFormatter
@@ -21,15 +23,16 @@ class HendelseApiKafkaProducer(config: KafkaConfig, private val topic: String) :
         producer.send(record) { metadata, err ->
             if (err != null) {
                 logger.error("Fikk ikke varslet hendelse for ${input.identifikator}", err)
+                prometheus.hendelseAvgitt(sendStatus = "feilet")
                 throw KafkaProducerException("Fikk ikke varslet hendelse for $${input.identifikator}")
             } else {
+                prometheus.hendelseAvgitt(sendStatus = "sendt")
                 logger.debug("Varslet hendelse for \${}: {}", input.identifikator, metadata)
             }
         }.get() // Blocking call to ensure the message is sent
     }
 
     private fun createRecord(input: HendelseInput): ProducerRecord<String, String> {
-
         val samHendelse = SamHendelse(
             tpNr = input.tpNr,
             identifikator = input.identifikator,
