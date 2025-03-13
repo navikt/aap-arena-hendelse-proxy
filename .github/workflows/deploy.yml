@@ -42,7 +42,7 @@ jobs:
       manifest: .nais/application-dev.yml
 
   prod:
-    if: false # github.event.pull_request.merged || github.event_name == 'push' || github.event.inputs.cluster == 'dev-gcp'
+    if: github.event.pull_request.merged || github.event_name == 'push' || github.event.inputs.cluster == 'dev-gcp'
     permissions:
       contents: read
       id-token: write
