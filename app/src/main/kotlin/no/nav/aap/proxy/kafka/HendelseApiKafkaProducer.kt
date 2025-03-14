@@ -22,7 +22,7 @@ class HendelseApiKafkaProducer(config: KafkaConfig, private val topic: String) :
         val record = createRecord(input)
         producer.send(record) { metadata, err ->
             if (err != null) {
-                logger.error("Fikk ikke varslet hendelse for ${input.identifikator}", err)
+                logger.error("Fikk ikke varslet hendelse for ${input.identifikator}.", err)
                 prometheus.hendelseAvgitt(sendStatus = "feilet").increment()
                 throw KafkaProducerException("Fikk ikke varslet hendelse for $${input.identifikator}")
             } else {
