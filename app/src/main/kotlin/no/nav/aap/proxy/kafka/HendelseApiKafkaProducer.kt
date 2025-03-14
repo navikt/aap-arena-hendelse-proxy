@@ -24,10 +24,10 @@ class HendelseApiKafkaProducer(config: KafkaConfig, private val topic: String) :
             if (err != null) {
                 logger.error("Fikk ikke varslet hendelse for ${input.identifikator}.", err)
                 prometheus.hendelseAvgitt(sendStatus = "feilet").increment()
-                throw KafkaProducerException("Fikk ikke varslet hendelse for $${input.identifikator}")
+                throw KafkaProducerException("Fikk ikke varslet hendelse for ${input.identifikator}")
             } else {
                 prometheus.hendelseAvgitt(sendStatus = "sendt").increment()
-                logger.debug("Varslet hendelse for \${}: {}", input.identifikator, metadata)
+                logger.debug("Varslet hendelse for {}: {}", input.identifikator, metadata)
             }
         }.get() // Blocking call to ensure the message is sent
     }

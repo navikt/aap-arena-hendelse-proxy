@@ -12,6 +12,7 @@ plugins {
 val komponenterVersjon = "1.0.175"
 val ktorVersion = "3.1.1"
 val mockOAuth2ServerVersion = "2.1.10"
+val testcontainersVersion = "1.20.6"
 
 repositories {
     mavenCentral()
@@ -44,6 +45,16 @@ dependencies {
         implementation("net.minidev:json-smart:2.5.2")
     }
     testImplementation("org.assertj:assertj-core:3.27.3")
+
+    // Testcontainers
+    testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
+    constraints {
+        implementation("org.apache.commons:commons-compress:1.27.1") {
+            because("https://github.com/advisories/GHSA-4g9r-vxhx-9pgx")
+        }
+    }
+    testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
+    testImplementation("org.testcontainers:kafka:$testcontainersVersion")
 }
 
 tasks {

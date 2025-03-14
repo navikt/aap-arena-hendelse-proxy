@@ -44,8 +44,6 @@ fun Application.server(
     config: Config,
     hendelseProducer: HendelseProducer
 ) {
-    val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
-
     commonKtorModule(
         prometheus = prometheus,
         azureConfig = config.azure,

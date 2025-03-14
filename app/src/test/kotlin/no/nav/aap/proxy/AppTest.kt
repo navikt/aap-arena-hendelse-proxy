@@ -17,6 +17,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import io.ktor.client.statement.*
+import no.nav.aap.proxy.prometheus
+import no.nav.aap.proxy.hendelseAvgitt
 
 class AppTest {
     companion object {
@@ -109,6 +112,54 @@ class AppTest {
         }
         val response = client.get("/openapi.json")
         assertEquals(HttpStatusCode.OK, response.status)
+    }
+
+    @Test
+    fun incrementsMetricWhenHendelseIsSent() = testApplication {
+        application {
+            server(Config(), object : HendelseProducer {
+                override fun produce(input: HendelseInput) {
+                    // Increment the metric directly, simulating what HendelseApiKafkaProducer would do
+                    prometheus.hendelseAvgitt(sendStatus = "sendt").increment()
+                }
+
+                override fun close() {
+                    // No-op
+                }
+            })
+        }
+        val client = createClient {
+            install(ContentNegotiation) {
+                jackson {
+                    registerModule(JavaTimeModule())
+                    disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                }
+            }
+        }
+
+        // Make a request to the /hendelse endpoint to trigger the metric increment
+        val response = client.post("/hendelse") {
+            contentType(ContentType.Application.Json)
+            bearerAuth(issueToken().serialize())
+            setBody(
+                HendelseInputFlereTpNr(
+                    tpNr = listOf("1234", "34565"),
+                    identifikator = "123459999",
+                    vedtakId = "12321",
+                    fom = LocalDate.now().minusWeeks(4),
+                    tom = LocalDate.now()
+                )
+            )
+        }
+        assertEquals(HttpStatusCode.Accepted, response.status)
+
+        // Get the metrics from the /actuator/metrics endpoint
+        val metricsResponse = client.get("/actuator/metrics")
+        assertEquals(HttpStatusCode.OK, metricsResponse.status)
+
+        // Check if the response contains the expected metric
+        val metricsBody = metricsResponse.bodyAsText()
+        assertThat(metricsBody).contains("aap_hendelse_proxy_hendelse_avgitt_total{sendStatus=\"sendt\"} 2.0")
     }
 
 

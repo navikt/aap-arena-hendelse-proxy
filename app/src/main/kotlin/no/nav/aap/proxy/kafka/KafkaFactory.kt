@@ -15,6 +15,7 @@ data class KafkaConfig(
     val truststorePath: String,
     val keystorePath: String,
     val credstorePsw: String,
+    val useSSL: Boolean = true
 )
 
 class KafkaFactory private constructor() {
@@ -29,15 +30,20 @@ class KafkaFactory private constructor() {
                 this[CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG] = config.brokers
                 this[ProducerConfig.ACKS_CONFIG] = "all"
                 this[ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION] = "5"
-                this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "SSL"
-                this[SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG] = "JKS"
-                this[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = config.truststorePath
-                this[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = config.credstorePsw
-                this[SslConfigs.SSL_KEYSTORE_TYPE_CONFIG] = "PKCS12"
-                this[SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG] = config.keystorePath
-                this[SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG] = config.credstorePsw
-                this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = config.credstorePsw
-                this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
+
+                if (config.useSSL) {
+                    this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "SSL"
+                    this[SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG] = "JKS"
+                    this[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = config.truststorePath
+                    this[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = config.credstorePsw
+                    this[SslConfigs.SSL_KEYSTORE_TYPE_CONFIG] = "PKCS12"
+                    this[SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG] = config.keystorePath
+                    this[SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG] = config.credstorePsw
+                    this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = config.credstorePsw
+                    this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
+                } else {
+                    this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "PLAINTEXT"
+                }
             }
 
             return KafkaProducer(properties(), StringSerde().serializer(), serializer)
