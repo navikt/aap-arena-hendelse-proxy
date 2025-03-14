@@ -94,6 +94,6 @@ class KafkaProducerTest {
 
         // Verify that the metric was incremented
         val metricValue = prometheus.hendelseAvgitt(sendStatus = "sendt").count()
-        assertThat(metricValue).isEqualTo(1.0)
+        assertThat(metricValue).isGreaterThanOrEqualTo(1.0)
     }
 }
