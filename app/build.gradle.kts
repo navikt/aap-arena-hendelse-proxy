@@ -24,7 +24,7 @@ application {
 }
 
 dependencies {
-    implementation("org.apache.kafka:kafka-clients:3.9.0")
+    implementation("org.apache.kafka:kafka-clients:4.0.0")
 
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
