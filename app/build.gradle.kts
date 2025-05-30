@@ -12,7 +12,7 @@ plugins {
 val komponenterVersjon = "1.0.247"
 val ktorVersion = "3.1.3"
 val mockOAuth2ServerVersion = "2.1.11"
-val testcontainersVersion = "1.21.0"
+val testcontainersVersion = "1.21.1"
 
 repositories {
     mavenCentral()
