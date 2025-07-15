@@ -10,24 +10,22 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.micrometer.prometheusmetrics.PrometheusConfig
-import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import no.nav.aap.komponenter.server.AZURE
 import no.nav.aap.komponenter.server.commonKtorModule
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import no.nav.aap.proxy.hendelse.hendelse
 import no.nav.aap.proxy.kafka.HendelseApiKafkaProducer
 import no.nav.aap.proxy.kafka.HendelseProducer
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 val logger: Logger = LoggerFactory.getLogger("App")
 
 fun main() {
     Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
         logger.error(
-            "Uhåndtert feil",
+            "Uhåndtert feil av type $throwable.class i thread ${thread.name}",
             throwable
         )
     }
