@@ -42,7 +42,7 @@ dependencies {
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
     constraints {
-        implementation("net.minidev:json-smart:2.5.2")
+        implementation("net.minidev:json-smart:2.6.0")
     }
     testImplementation("org.assertj:assertj-core:3.27.3")
 
