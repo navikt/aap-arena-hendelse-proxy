@@ -14,11 +14,6 @@ val ktorVersion = "3.3.1"
 val mockOAuth2ServerVersion = "3.0.0"
 val testcontainersVersion = "1.21.3"
 
-repositories {
-    mavenCentral()
-    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
-}
-
 application {
     mainClass.set("no.nav.aap.proxy.AppKt")
 }
@@ -59,13 +54,7 @@ dependencies {
 
 tasks {
     withType<ShadowJar> {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         mergeServiceFiles()
-    }
-}
-
-kotlin {
-    jvmToolchain(21)
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
     }
 }
