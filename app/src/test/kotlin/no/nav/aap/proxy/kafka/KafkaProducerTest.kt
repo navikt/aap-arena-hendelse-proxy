@@ -25,7 +25,7 @@ class KafkaProducerTest {
 
     companion object {
         @Container
-        val kafka = KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"))
+        val kafka = KafkaContainer(DockerImageName.parse("apache/kafka-native:4.1.0"))
             .withReuse(true)
     }
 
@@ -52,6 +52,7 @@ class KafkaProducerTest {
     @AfterEach
     fun tearDown() {
         consumer.close()
+        kafka.stop()
     }
 
     @Test
