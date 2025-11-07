@@ -5,13 +5,13 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id("aap-hendelse-proxy.conventions")
     kotlin("jvm")
-    id("io.ktor.plugin") version "3.3.1"
+    id("io.ktor.plugin") version "3.3.2"
     application
 }
 
 val komponenterVersjon = "1.0.426"
 val ktorVersion = "3.3.1"
-val mockOAuth2ServerVersion = "3.0.0"
+val mockOAuth2ServerVersion = "3.0.1"
 val testcontainersVersion = "1.21.3"
 
 application {
