@@ -5,13 +5,13 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id("aap-hendelse-proxy.conventions")
     kotlin("jvm")
-    id("io.ktor.plugin") version "3.3.1"
+    id("io.ktor.plugin") version "3.3.2"
     application
 }
 
 val komponenterVersjon = "1.0.426"
-val ktorVersion = "3.3.1"
-val mockOAuth2ServerVersion = "3.0.0"
+val ktorVersion = "3.3.2"
+val mockOAuth2ServerVersion = "3.0.1"
 val testcontainersVersion = "1.21.3"
 
 application {
@@ -28,7 +28,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.15.5")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.16.0")
 
     implementation("ch.qos.logback:logback-classic:1.5.20")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
