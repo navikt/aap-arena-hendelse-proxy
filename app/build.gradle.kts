@@ -12,7 +12,7 @@ plugins {
 val komponenterVersjon = "1.0.432"
 val ktorVersion = "3.3.2"
 val mockOAuth2ServerVersion = "3.0.1"
-val testcontainersVersion = "1.21.3"
+val testcontainersVersion = "2.0.1"
 
 application {
     mainClass.set("no.nav.aap.proxy.AppKt")
@@ -42,14 +42,9 @@ dependencies {
     testImplementation("org.assertj:assertj-core:3.27.6")
 
     // Testcontainers
-    testImplementation("org.testcontainers:testcontainers:$testcontainersVersion")
-    constraints {
-        implementation("org.apache.commons:commons-compress:1.28.0") {
-            because("https://github.com/advisories/GHSA-4g9r-vxhx-9pgx")
-        }
-    }
-    testImplementation("org.testcontainers:junit-jupiter:$testcontainersVersion")
-    testImplementation("org.testcontainers:kafka:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-postgresql:$testcontainersVersion")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter:${testcontainersVersion}")
+    testImplementation("org.testcontainers:testcontainers-kafka:$testcontainersVersion")
 }
 
 tasks {
