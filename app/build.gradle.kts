@@ -12,14 +12,14 @@ plugins {
 val komponenterVersjon = "1.0.432"
 val ktorVersion = "3.3.2"
 val mockOAuth2ServerVersion = "3.0.1"
-val testcontainersVersion = "2.0.1"
+val testcontainersVersion = "2.0.2"
 
 application {
     mainClass.set("no.nav.aap.proxy.AppKt")
 }
 
 dependencies {
-    implementation("org.apache.kafka:kafka-clients:4.1.0")
+    implementation("org.apache.kafka:kafka-clients:4.1.1")
 
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
@@ -30,7 +30,7 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.0")
 
-    implementation("ch.qos.logback:logback-classic:1.5.20")
+    implementation("ch.qos.logback:logback-classic:1.5.21")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
