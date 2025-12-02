@@ -10,7 +10,7 @@ plugins {
 }
 
 val komponenterVersjon = "1.0.452"
-val ktorVersion = "3.3.2"
+val ktorVersion = "3.3.3"
 val mockOAuth2ServerVersion = "3.0.1"
 val testcontainersVersion = "2.0.2"
 
