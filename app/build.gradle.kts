@@ -28,9 +28,9 @@ dependencies {
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.16.0")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.16.1")
 
-    implementation("ch.qos.logback:logback-classic:1.5.21")
+    implementation("ch.qos.logback:logback-classic:1.5.22")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
