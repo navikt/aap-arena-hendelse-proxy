@@ -1,9 +1,8 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 
 plugins {
-    id("aap-hendelse-proxy.conventions")
+    id("aap.conventions")
     kotlin("jvm")
     id("io.ktor.plugin") version "3.3.3"
     application
