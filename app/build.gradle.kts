@@ -29,7 +29,7 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.3")
 
-    implementation("ch.qos.logback:logback-classic:1.5.29")
+    implementation("ch.qos.logback:logback-classic:1.5.31")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
