@@ -18,7 +18,7 @@ application {
 }
 
 dependencies {
-    implementation("org.apache.kafka:kafka-clients:4.1.1")
+    implementation("org.apache.kafka:kafka-clients:4.2.0")
 
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
@@ -29,7 +29,7 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.3")
 
-    implementation("ch.qos.logback:logback-classic:1.5.31")
+    implementation("ch.qos.logback:logback-classic:1.5.32")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
