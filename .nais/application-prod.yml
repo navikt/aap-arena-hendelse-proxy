@@ -47,8 +47,6 @@ spec:
       destinations:
         - id: elastic
         - id: loki
-  secureLogs:
-    enabled: true
   env:
     - name: HENDELSE_TOPIC
       value: pensjonsamhandling.sam-vedtak-hendelser-p
