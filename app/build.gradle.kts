@@ -11,7 +11,7 @@ plugins {
 val komponenterVersjon = "2.0.17"
 val ktorVersion = "3.4.1"
 val mockOAuth2ServerVersion = "3.0.1"
-val testcontainersVersion = "2.0.3"
+val testcontainersVersion = "2.0.4"
 
 application {
     mainClass.set("no.nav.aap.proxy.AppKt")
@@ -27,7 +27,7 @@ dependencies {
 
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.1")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.16.3")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.16.4")
 
     implementation("ch.qos.logback:logback-classic:1.5.32")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
