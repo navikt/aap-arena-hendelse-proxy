@@ -8,7 +8,7 @@ plugins {
     application
 }
 
-val komponenterVersjon = "2.0.25"
+val komponenterVersjon = "2.0.26"
 val ktorVersion = "3.4.1"
 val mockOAuth2ServerVersion = "3.0.1"
 val testcontainersVersion = "2.0.3"
