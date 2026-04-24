@@ -11,7 +11,7 @@ plugins {
 val komponenterVersjon = "2.0.38"
 val ktorVersion = "3.4.2"
 val mockOAuth2ServerVersion = "3.0.1"
-val testcontainersVersion = "2.0.4"
+val testcontainersVersion = "2.0.5"
 
 application {
     mainClass.set("no.nav.aap.proxy.AppKt")
