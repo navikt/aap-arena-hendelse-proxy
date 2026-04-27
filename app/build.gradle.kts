@@ -4,12 +4,12 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id("aap.conventions")
     kotlin("jvm")
-    id("io.ktor.plugin") version "3.4.2"
+    id("io.ktor.plugin") version "3.4.3"
     application
 }
 
 val komponenterVersjon = "2.0.38"
-val ktorVersion = "3.4.2"
+val ktorVersion = "3.4.3"
 val mockOAuth2ServerVersion = "3.0.1"
 val testcontainersVersion = "2.0.5"
 
