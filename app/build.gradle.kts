@@ -25,7 +25,7 @@ dependencies {
     implementation("no.nav.aap.kelvin:server:$komponenterVersjon")
     implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
 
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.2")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.3")
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.16.5")
 
