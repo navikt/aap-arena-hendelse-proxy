@@ -32,6 +32,8 @@ class AppTest {
             System.setProperty("kafka.keystore.path", "...")
             System.setProperty("kafka.credstore.password", "...")
             System.setProperty("hendelse.topic", "...")
+            System.setProperty("arena.vedtak.topic", "...")
+            System.setProperty("intern.hendelse.topic", "...")
         }
 
         @BeforeAll
