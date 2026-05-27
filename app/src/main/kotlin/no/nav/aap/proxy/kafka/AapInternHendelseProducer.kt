@@ -17,10 +17,10 @@ class AapInternHendelseProducer(config: KafkaConfig, private val topic: String) 
         val json = DefaultJsonMapper.toJson(record)
         producer.send(ProducerRecord(topic, record.ident, json)) { metadata, err ->
             if (err != null) {
-                logger.error("Feil ved publisering av intern hendelse for ${record.ident}", err)
-                throw KafkaProducerException("Feil ved publisering av intern hendelse for ${record.ident}")
+                logger.error("Feil ved publisering av intern hendelse", err)
+                throw KafkaProducerException("Feil ved publisering av intern hendelse")
             } else {
-                logger.debug("Publiserte intern hendelse for {}: {}", record.ident, metadata)
+                logger.debug("Publiserte intern hendelse: {}", metadata)
             }
         }.get()
     }
