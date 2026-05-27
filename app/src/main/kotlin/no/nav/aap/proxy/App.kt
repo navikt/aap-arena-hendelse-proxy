@@ -21,6 +21,7 @@ import no.nav.aap.proxy.kafka.AapInternHendelseProducer
 import no.nav.aap.proxy.kafka.ArenaKafkaConsumer
 import no.nav.aap.proxy.kafka.HendelseApiKafkaProducer
 import no.nav.aap.proxy.kafka.HendelseProducer
+import no.nav.aap.proxy.kafka.InternHendelseProducer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -50,7 +51,7 @@ fun Application.server(
     config: Config,
     hendelseProducer: HendelseProducer,
     arenaKafkaConsumer: ArenaKafkaConsumer? = null,
-    internHendelseProducer: AapInternHendelseProducer? = null,
+    internHendelseProducer: InternHendelseProducer? = null,
 ) {
     commonKtorModule(
         prometheus = prometheus,

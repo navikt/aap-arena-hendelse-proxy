@@ -6,10 +6,14 @@ import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger(AapInternHendelseProducer::class.java)
 
-class AapInternHendelseProducer(config: KafkaConfig, private val topic: String) : AutoCloseable {
+interface InternHendelseProducer : AutoCloseable {
+    fun produce(record: AapHendelseRecord)
+}
+
+class AapInternHendelseProducer(config: KafkaConfig, private val topic: String) : InternHendelseProducer {
     private val producer = KafkaFactory.createProducer("aap-intern-hendelse-producer", config)
 
-    fun produce(record: AapHendelseRecord) {
+    override fun produce(record: AapHendelseRecord) {
         val json = DefaultJsonMapper.toJson(record)
         producer.send(ProducerRecord(topic, record.ident, json)) { metadata, err ->
             if (err != null) {

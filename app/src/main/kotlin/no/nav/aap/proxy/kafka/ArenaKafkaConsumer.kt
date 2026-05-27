@@ -8,12 +8,19 @@ import java.time.Duration
 private val logger = LoggerFactory.getLogger(ArenaKafkaConsumer::class.java)
 
 class ArenaKafkaConsumer(
-    config: KafkaConfig,
     private val arenaVedtakTopic: String,
-    private val internHendelseProducer: AapInternHendelseProducer,
+    private val internHendelseProducer: InternHendelseProducer,
+    private val consumer: Consumer<String, String>,
 ) : AutoCloseable {
-    private val consumer: Consumer<String, String> =
-        KafkaFactory.createConsumer("aap-arena-vedtak-consumer", config)
+    constructor(
+        config: KafkaConfig,
+        arenaVedtakTopic: String,
+        internHendelseProducer: InternHendelseProducer,
+    ) : this(
+        arenaVedtakTopic,
+        internHendelseProducer,
+        KafkaFactory.createConsumer("aap-arena-vedtak-consumer", config),
+    )
 
     @Volatile
     private var running = true
@@ -26,13 +33,7 @@ class ArenaKafkaConsumer(
             for (record in records) {
                 try {
                     val arenaRecord = DefaultJsonMapper.fromJson<ArenaVedtakRecord>(record.value())
-                    if (arenaRecord.opType == "D") continue
-                    val vedtakData = arenaRecord.after ?: continue
-                    val hendelseRecord = AapHendelseRecord(
-                        ident = vedtakData.personident,
-                        hendelse = Hendelse.VEDTAK,
-                    )
-                    internHendelseProducer.produce(hendelseRecord)
+                    mapToHendelse(arenaRecord)?.let { internHendelseProducer.produce(it) }
                 } catch (e: Exception) {
                     logger.error("Feil ved prosessering av arena-vedtak-record offset={}", record.offset(), e)
                 }
@@ -41,6 +42,15 @@ class ArenaKafkaConsumer(
                 consumer.commitSync()
             }
         }
+    }
+
+    internal fun mapToHendelse(record: ArenaVedtakRecord): AapHendelseRecord? {
+        if (record.opType == "D") return null
+        val vedtakData = record.after ?: return null
+        return AapHendelseRecord(
+            ident = vedtakData.personident,
+            hendelse = Hendelse.VEDTAK,
+        )
     }
 
     override fun close() {
