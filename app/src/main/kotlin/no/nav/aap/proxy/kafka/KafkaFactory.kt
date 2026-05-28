@@ -1,6 +1,9 @@
 package no.nav.aap.proxy.kafka
 
 import org.apache.kafka.clients.CommonClientConfigs
+import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerConfig
@@ -51,5 +54,25 @@ class KafkaFactory private constructor() {
 
         fun createProducer(clientId: String, config: KafkaConfig): Producer<String, String> =
             createProducer(clientId, config, StringSerde().serializer())
+
+        fun createConsumer(groupId: String, config: KafkaConfig): Consumer<String, String> {
+            fun properties(): Properties = Properties().apply {
+                this[CommonClientConfigs.CLIENT_ID_CONFIG] = groupId
+                this[ConsumerConfig.GROUP_ID_CONFIG] = groupId
+                this[CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG] = config.brokers
+                this[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
+                this[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "false"
+                this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "SSL"
+                this[SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG] = "JKS"
+                this[SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG] = config.truststorePath
+                this[SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG] = config.credstorePsw
+                this[SslConfigs.SSL_KEYSTORE_TYPE_CONFIG] = "PKCS12"
+                this[SslConfigs.SSL_KEYSTORE_LOCATION_CONFIG] = config.keystorePath
+                this[SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG] = config.credstorePsw
+                this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = config.credstorePsw
+                this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
+            }
+            return KafkaConsumer(properties(), StringSerde().deserializer(), StringSerde().deserializer())
+        }
     }
 }

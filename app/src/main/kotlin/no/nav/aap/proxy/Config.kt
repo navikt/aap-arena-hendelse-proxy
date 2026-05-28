@@ -13,4 +13,6 @@ data class Config(
         credstorePsw = requiredConfigForKey("kafka.credstore.password"),
     ),
     val topicConfig: String = requiredConfigForKey("hendelse.topic"),
+    val arenaVedtakTopic: String = requiredConfigForKey("arena.vedtak.topic"),
+    val internHendelseTopic: String = requiredConfigForKey("intern.hendelse.topic"),
 )

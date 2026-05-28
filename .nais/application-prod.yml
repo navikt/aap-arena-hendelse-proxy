@@ -50,3 +50,7 @@ spec:
   env:
     - name: HENDELSE_TOPIC
       value: pensjonsamhandling.sam-vedtak-hendelser-p
+    - name: ARENA_VEDTAK_TOPIC
+      value: teamarenanais.aapen-arena-aapvedtakendret-v1-prod
+    - name: INTERN_HENDELSE_TOPIC
+      value: aap.api-intern-hendelse-v1

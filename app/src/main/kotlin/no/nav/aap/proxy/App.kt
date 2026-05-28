@@ -10,13 +10,18 @@ import io.ktor.server.netty.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import no.nav.aap.komponenter.server.AZURE
 import no.nav.aap.komponenter.server.commonKtorModule
 import no.nav.aap.proxy.hendelse.hendelse
+import no.nav.aap.proxy.kafka.AapInternHendelseProducer
+import no.nav.aap.proxy.kafka.ArenaKafkaConsumer
 import no.nav.aap.proxy.kafka.HendelseApiKafkaProducer
 import no.nav.aap.proxy.kafka.HendelseProducer
+import no.nav.aap.proxy.kafka.InternHendelseProducer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -30,17 +35,23 @@ fun main() {
         )
     }
     val config = Config()
+    val internHendelseProducer = AapInternHendelseProducer(config.kafka, config.internHendelseTopic)
+    val arenaKafkaConsumer = ArenaKafkaConsumer(config.kafka, config.arenaVedtakTopic, internHendelseProducer)
     embeddedServer(Netty, port = 8080) {
         server(
             config,
             HendelseApiKafkaProducer(config.kafka, config.topicConfig),
+            arenaKafkaConsumer,
+            internHendelseProducer,
         )
     }.start(wait = true)
 }
 
 fun Application.server(
     config: Config,
-    hendelseProducer: HendelseProducer
+    hendelseProducer: HendelseProducer,
+    arenaKafkaConsumer: ArenaKafkaConsumer? = null,
+    internHendelseProducer: InternHendelseProducer? = null,
 ) {
     commonKtorModule(
         prometheus = prometheus,
@@ -62,10 +73,20 @@ fun Application.server(
         }
     }
 
+    monitor.subscribe(ApplicationStarted) {
+        arenaKafkaConsumer?.let { consumer ->
+            launch(Dispatchers.IO) {
+                consumer.start()
+            }
+        }
+    }
+
     monitor.subscribe(ApplicationStopping) {
         runBlocking {
             delay(50)
         }
+        arenaKafkaConsumer?.close()
+        internHendelseProducer?.close()
         hendelseProducer.close()
     }
 
