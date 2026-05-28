@@ -48,8 +48,8 @@ class ArenaKafkaConsumer(
                 }
             }
         } catch (e: WakeupException) {
-            if (running) throw e
-            logger.info("Consumer stoppet")
+            if (running) logger.warn("Uventet WakeupException", e)
+            else logger.info("Consumer stoppet")
         } finally {
             stopped.countDown()
         }
