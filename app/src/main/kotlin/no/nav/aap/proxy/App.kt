@@ -36,7 +36,9 @@ fun main() {
     }
     val config = Config()
     val internHendelseProducer = AapInternHendelseProducer(config.kafka, config.internHendelseTopic)
-    val arenaKafkaConsumer = ArenaKafkaConsumer(config.kafka, config.arenaVedtakTopic, internHendelseProducer)
+    val arenaKafkaConsumer = config.arenaVedtakTopic?.let {
+        ArenaKafkaConsumer(config.kafka, it, internHendelseProducer)
+    }
     embeddedServer(Netty, port = 8080) {
         server(
             config,
