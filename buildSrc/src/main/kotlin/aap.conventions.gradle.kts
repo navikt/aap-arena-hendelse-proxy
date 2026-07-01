@@ -9,7 +9,7 @@ version = project.findProperty("version")?.toString() ?: "0.0.0"
 
 testing {
     suites {
-        @Suppress("UnstableApiUsage") val test by getting(JvmTestSuite::class) {
+        @Suppress("UnstableApiUsage", "unused") val test = getByName<JvmTestSuite>("test") {
             useJUnitJupiter()
         }
     }
