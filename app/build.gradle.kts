@@ -4,46 +4,41 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id("aap.conventions")
     kotlin("jvm")
-    id("io.ktor.plugin") version "3.5.1"
+    alias(libs.plugins.ktor)
     application
 }
-
-val komponenterVersjon = "2.0.87"
-val ktorVersion = "3.5.1"
-val mockOAuth2ServerVersion = "5.0.1"
-val testcontainersVersion = "2.0.5"
 
 application {
     mainClass.set("no.nav.aap.proxy.AppKt")
 }
 
 dependencies {
-    implementation("org.apache.kafka:kafka-clients:4.3.1")
+    implementation(libs.kafkaClients)
 
-    implementation("io.ktor:ktor-server-core:$ktorVersion")
-    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
-    implementation("no.nav.aap.kelvin:server:$komponenterVersjon")
-    implementation("no.nav.aap.kelvin:infrastructure:$komponenterVersjon")
+    implementation(libs.ktorServerCore)
+    implementation(libs.ktorServerStatusPages)
+    implementation(libs.server)
+    implementation(libs.infrastructure)
 
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.0")
+    implementation(libs.jacksonDatatypeJsr310)
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.17.0")
+    implementation(libs.micrometerRegistryPrometheus)
 
-    implementation("ch.qos.logback:logback-classic:1.5.37")
-    runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
+    implementation(libs.logbackClassic)
+    runtimeOnly(libs.logstashLogbackEncoder)
 
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:$mockOAuth2ServerVersion")
+    testImplementation(libs.ktorServerTestHost)
+    testImplementation(libs.ktorClientContentNegotiation)
+    testImplementation(libs.mockOAuth2Server)
     constraints {
-        implementation("net.minidev:json-smart:2.6.0")
+        implementation(libs.jsonSmart)
     }
-    testImplementation("org.assertj:assertj-core:3.27.7")
+    testImplementation(libs.assertJ)
 
     // Testcontainers
-    testImplementation("org.testcontainers:testcontainers-postgresql:$testcontainersVersion")
-    testImplementation("org.testcontainers:testcontainers-junit-jupiter:${testcontainersVersion}")
-    testImplementation("org.testcontainers:testcontainers-kafka:$testcontainersVersion")
+    testImplementation(libs.testcontainersPostgres)
+    testImplementation(libs.testcontainersJunitJupiter)
+    testImplementation(libs.testcontainersKafka)
 }
 
 tasks {

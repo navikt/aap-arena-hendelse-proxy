@@ -1,0 +1,31 @@
+[versions]
+ktor = "3.5.1"
+komponenter = "2.0.90"
+mockOAuth2Server = "5.0.1"
+testcontainers = "2.0.5"
+
+[libraries]
+kafkaClients = { module = "org.apache.kafka:kafka-clients", version = "4.3.1" }
+
+ktorServerCore = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktorServerStatusPages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+ktorServerTestHost = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+ktorClientContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+
+server = { module = "no.nav.aap.kelvin:server", version.ref = "komponenter" }
+infrastructure = { module = "no.nav.aap.kelvin:infrastructure", version.ref = "komponenter" }
+
+jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version = "2.22.0" }
+micrometerRegistryPrometheus = { module = "io.micrometer:micrometer-registry-prometheus", version = "1.17.0" }
+logbackClassic = { module = "ch.qos.logback:logback-classic", version = "1.5.37" }
+logstashLogbackEncoder = { module = "net.logstash.logback:logstash-logback-encoder", version = "9.0" }
+
+mockOAuth2Server = { module = "no.nav.security:mock-oauth2-server", version.ref = "mockOAuth2Server" }
+assertJ = { module = "org.assertj:assertj-core", version = "3.27.7" }
+jsonSmart = { module = "net.minidev:json-smart", version = "2.6.0" }
+testcontainersPostgres = { module = "org.testcontainers:testcontainers-postgresql", version.ref = "testcontainers" }
+testcontainersJunitJupiter = { module = "org.testcontainers:testcontainers-junit-jupiter", version.ref = "testcontainers" }
+testcontainersKafka = { module = "org.testcontainers:testcontainers-kafka", version.ref = "testcontainers" }
+
+[plugins]
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
