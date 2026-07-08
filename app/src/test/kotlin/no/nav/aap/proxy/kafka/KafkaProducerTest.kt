@@ -12,34 +12,31 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 import org.testcontainers.kafka.KafkaContainer
 import org.testcontainers.utility.DockerImageName
 import java.time.Duration
 import java.time.LocalDate
 import java.util.*
 
-@Testcontainers
 class KafkaProducerTest {
 
     companion object {
-        @Container
-        val kafka = KafkaContainer(DockerImageName.parse("apache/kafka-native:4.1.0"))
-            .withReuse(true)
+        val kafka = KafkaContainer(DockerImageName.parse("apache/kafka-native:4.1.0")).apply {
+            withReuse(true)
+            start()
+        }
     }
 
     private lateinit var consumer: KafkaConsumer<String, String>
-    private val testTopic = "test-hendelse-topic"
+    private val testTopic = "test-hendelse-topic-${UUID.randomUUID()}"
+    private val consumerGroupId = "test-consumer-group-${UUID.randomUUID()}"
 
     @BeforeEach
     fun setup() {
-        kafka.start()
-
         // Configure consumer
         val consumerProps = Properties().apply {
             this[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafka.bootstrapServers
-            this[ConsumerConfig.GROUP_ID_CONFIG] = "test-consumer-group"
+            this[ConsumerConfig.GROUP_ID_CONFIG] = consumerGroupId
             this[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
             this[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
             this[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
@@ -52,7 +49,6 @@ class KafkaProducerTest {
     @AfterEach
     fun tearDown() {
         consumer.close()
-        kafka.stop()
     }
 
     @Test
@@ -82,12 +78,16 @@ class KafkaProducerTest {
         producer.produce(testInput)
 
         // Poll for the message
-        val records = consumer.poll(Duration.ofSeconds(5))
+        val records = mutableListOf<org.apache.kafka.clients.consumer.ConsumerRecord<String, String>>()
+        val startTime = System.currentTimeMillis()
+        while (records.isEmpty() && System.currentTimeMillis() - startTime < 10000) {
+            records.addAll(consumer.poll(Duration.ofMillis(500)).toList())
+        }
 
         // Verify that the message was received
-        assertThat(records.count()).isEqualTo(1)
+        assertThat(records.size).isEqualTo(1)
 
-        val record = records.iterator().next()
+        val record = records.first()
         assertThat(record.key()).isEqualTo(testInput.identifikator)
         assertThat(record.value()).contains(testInput.identifikator)
         assertThat(record.value()).contains(testInput.tpNr)
