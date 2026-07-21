@@ -1,6 +1,6 @@
 [versions]
 ktor = "3.5.1"
-komponenter = "2.0.106"
+komponenter = "2.0.107"
 mockOAuth2Server = "5.0.2"
 testcontainers = "2.0.5"
 
