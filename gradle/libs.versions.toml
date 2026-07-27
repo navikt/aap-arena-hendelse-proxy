@@ -17,7 +17,7 @@ infrastructure = { module = "no.nav.aap.kelvin:infrastructure", version.ref = "k
 
 jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version = "2.22.1" }
 micrometerRegistryPrometheus = { module = "io.micrometer:micrometer-registry-prometheus", version = "1.17.0" }
-logbackClassic = { module = "ch.qos.logback:logback-classic", version = "1.5.38" }
+logbackClassic = { module = "ch.qos.logback:logback-classic", version = "1.6.0" }
 logstashLogbackEncoder = { module = "net.logstash.logback:logstash-logback-encoder", version = "9.0" }
 
 mockOAuth2Server = { module = "no.nav.security:mock-oauth2-server", version.ref = "mockOAuth2Server" }
