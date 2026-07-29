@@ -2,28 +2,46 @@ package no.nav.aap.proxy
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
+import io.ktor.server.application.install
+import io.ktor.server.engine.ConnectorType
+import io.ktor.server.engine.EmbeddedServer
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation as ServerContentNegatiation
+import io.ktor.server.response.respond
+import io.ktor.server.routing.post
+import io.ktor.server.routing.routing
 import io.ktor.server.testing.*
+import java.time.LocalDate
+import kotlinx.coroutines.runBlocking
+import no.nav.aap.proxy.auth.TokenGen
 import no.nav.aap.proxy.kafka.HendelseInput
 import no.nav.aap.proxy.kafka.HendelseInputFlereTpNr
 import no.nav.aap.proxy.kafka.HendelseProducer
-import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import io.ktor.client.statement.*
-import no.nav.aap.proxy.prometheus
-import no.nav.aap.proxy.hendelseAvgitt
 
 class AppTest {
     companion object {
-        private val server = MockOAuth2Server()
+        private val texas = embeddedServer(Netty, port = 0, module = {
+            install(ServerContentNegatiation) {
+                jackson()
+            }
+
+            routing {
+                post("/introspect") {
+                    call.respond(mapOf("active" to true))
+                }
+            }
+        })
 
         init {
             System.setProperty("KAFKA_HOST", "localhost:9092")
@@ -39,25 +57,15 @@ class AppTest {
         @BeforeAll
         @JvmStatic
         fun setup() {
-            server.start()
+            texas.start()
 
-            val wellnowurl = server.wellKnownUrl("default").toString()
-            val jwksuri = server.jwksUrl("default").toString()
-
-            System.setProperty(
-                "azure.openid.config.token.endpoint",
-                server.tokenEndpointUrl("default").toString()
-            )
-            System.setProperty("azure.app.client.id", "default")
-            System.setProperty("azure.app.client.secret", "xxxx")
-            System.setProperty("azure.openid.config.jwks.uri", jwksuri)
-            System.setProperty("azure.openid.config.issuer", server.issuerUrl("default").toString())
+            System.setProperty("nais.token.introspection.endpoint", "http://localhost:${texas.port()}/introspect")
         }
 
         @AfterAll
         @JvmStatic
         fun tearDown() {
-            server.shutdown()
+            texas.stop()
         }
     }
 
@@ -65,7 +73,7 @@ class AppTest {
     fun senderTilKafka() = testApplication {
         val received = mutableListOf<HendelseInput>()
         application {
-            server(Config(), object : HendelseProducer {
+            server(object : HendelseProducer {
                 override fun produce(input: HendelseInput) {
                     received.add(input)
                 }
@@ -84,7 +92,7 @@ class AppTest {
         }
         val response = client.post("/hendelse") {
             contentType(ContentType.Application.Json)
-            bearerAuth(issueToken().serialize())
+            bearerAuth(TokenGen("issuer", "audience").generate())
             setBody(
                 HendelseInputFlereTpNr(
                     tpNr = listOf("1234", "34565"),
@@ -102,7 +110,7 @@ class AppTest {
     @Test
     fun serverSwagger() = testApplication {
         application {
-            server(Config(), object : HendelseProducer {
+            server(object : HendelseProducer {
                 override fun produce(input: HendelseInput) {
                     TODO("Not yet implemented")
                 }
@@ -119,7 +127,7 @@ class AppTest {
     @Test
     fun incrementsMetricWhenHendelseIsSent() = testApplication {
         application {
-            server(Config(), object : HendelseProducer {
+            server(object : HendelseProducer {
                 override fun produce(input: HendelseInput) {
                     // Increment the metric directly, simulating what HendelseApiKafkaProducer would do
                     prometheus.hendelseAvgitt(sendStatus = "sendt").increment()
@@ -142,7 +150,7 @@ class AppTest {
         // Make a request to the /hendelse endpoint to trigger the metric increment
         val response = client.post("/hendelse") {
             contentType(ContentType.Application.Json)
-            bearerAuth(issueToken().serialize())
+            bearerAuth(TokenGen("issuer", "audience").generate())
             setBody(
                 HendelseInputFlereTpNr(
                     tpNr = listOf("1234", "34565"),
@@ -164,12 +172,9 @@ class AppTest {
         assertThat(metricsBody).contains("aap_hendelse_proxy_hendelse_avgitt_total{sendStatus=\"sendt\"} 2.0")
     }
 
-
-    private fun issueToken() = server.issueToken(
-        issuerId = "default",
-        claims = mapOf(
-//            "scope" to scope,
-            "consumer" to mapOf("authority" to "123")
-        ),
-    )
 }
+
+private fun EmbeddedServer<*, *>.port(): Int =
+    runBlocking { this@port.engine.resolvedConnectors() }
+        .first { it.type == ConnectorType.HTTP }
+        .port

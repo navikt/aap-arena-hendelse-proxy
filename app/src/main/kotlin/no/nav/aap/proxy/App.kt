@@ -2,19 +2,22 @@ package no.nav.aap.proxy
 
 import com.papsign.ktor.openapigen.model.info.InfoModel
 import com.papsign.ktor.openapigen.route.apiRouting
-import io.ktor.http.*
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import io.ktor.http.HttpStatusCode
+import io.ktor.server.application.Application
+import io.ktor.server.application.ApplicationStarted
+import io.ktor.server.application.ApplicationStopping
+import io.ktor.server.application.install
+import io.ktor.server.auth.authenticate
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.response.respond
+import io.ktor.server.routing.routing
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import no.nav.aap.komponenter.server.AZURE
+import no.nav.aap.komponenter.server.auth.IdentityProvider
 import no.nav.aap.komponenter.server.commonKtorModule
 import no.nav.aap.proxy.hendelse.hendelse
 import no.nav.aap.proxy.kafka.AapInternHendelseProducer
@@ -39,7 +42,6 @@ fun main() {
     val arenaKafkaConsumer = ArenaKafkaConsumer(config.kafka, config.arenaVedtakTopic, internHendelseProducer)
     embeddedServer(Netty, port = 8080) {
         server(
-            config,
             HendelseApiKafkaProducer(config.kafka, config.topicConfig),
             arenaKafkaConsumer,
             internHendelseProducer,
@@ -48,18 +50,16 @@ fun main() {
 }
 
 fun Application.server(
-    config: Config,
     hendelseProducer: HendelseProducer,
     arenaKafkaConsumer: ArenaKafkaConsumer? = null,
     internHendelseProducer: InternHendelseProducer? = null,
 ) {
     commonKtorModule(
         prometheus = prometheus,
-        azureConfig = config.azure,
         infoModel = InfoModel(
             title = "AAP Arena HendelseProxy",
         ),
-        tokenxConfig = null,
+        identityProvider = IdentityProvider.ENTRA_ID
     )
 
     install(StatusPages) {
@@ -91,7 +91,7 @@ fun Application.server(
     }
 
     routing {
-        authenticate(AZURE) {
+        authenticate(IdentityProvider.ENTRA_ID.value) {
             apiRouting {
                 hendelse(hendelseProducer)
             }
