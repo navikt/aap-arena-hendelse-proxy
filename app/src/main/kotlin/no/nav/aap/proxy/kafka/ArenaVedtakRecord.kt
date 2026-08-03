@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ArenaVedtakRecord(
-    @JsonProperty("op_type") val opType: String,
+    @param:JsonProperty("op_type") val opType: String,
     val before: AapVedtakData?,
     val after: AapVedtakData?,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class AapVedtakData(
-    @JsonProperty("PERSONIDENT") val personident: String,
-    @JsonProperty("VEDTAK_ID") val vedtakId: Long,
+    @param:JsonProperty("PERSONIDENT") val personident: String,
+    @param:JsonProperty("VEDTAK_ID") val vedtakId: Long,
 )
