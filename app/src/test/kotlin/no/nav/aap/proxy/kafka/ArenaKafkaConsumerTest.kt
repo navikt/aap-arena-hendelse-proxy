@@ -1,7 +1,6 @@
 package no.nav.aap.proxy.kafka
 
 import org.apache.kafka.clients.consumer.MockConsumer
-import org.apache.kafka.clients.consumer.internals.AutoOffsetResetStrategy
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +14,7 @@ class ArenaKafkaConsumerTest {
     private val consumer = ArenaKafkaConsumer(
         arenaVedtakTopic = "test-topic",
         internHendelseProducer = mockProducer,
-        consumer = MockConsumer(AutoOffsetResetStrategy.EARLIEST.toString()),
+        consumer = MockConsumer("earliest"),
     )
 
     @Test
