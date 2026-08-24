@@ -27,6 +27,7 @@ import no.nav.aap.proxy.kafka.HendelseProducer
 import no.nav.aap.proxy.kafka.InternHendelseProducer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import kotlin.time.Duration.Companion.milliseconds
 
 val logger: Logger = LoggerFactory.getLogger("App")
 
@@ -83,7 +84,7 @@ fun Application.server(
 
     monitor.subscribe(ApplicationStopping) {
         runBlocking {
-            delay(50)
+            delay(50.milliseconds)
         }
         arenaKafkaConsumer?.close()
         internHendelseProducer?.close()
