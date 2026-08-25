@@ -1,7 +1,7 @@
 [versions]
 ktor = "3.5.2"
 komponenter = "2.0.144"
-mockOAuth2Server = "6.0.1"
+mockOAuth2Server = "6.0.2"
 testcontainers = "2.0.5"
 
 [libraries]
@@ -16,7 +16,7 @@ server = { module = "no.nav.aap.kelvin:server", version.ref = "komponenter" }
 infrastructure = { module = "no.nav.aap.kelvin:infrastructure", version.ref = "komponenter" }
 
 jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version = "2.22.2" }
-micrometerRegistryPrometheus = { module = "io.micrometer:micrometer-registry-prometheus", version = "1.17.0" }
+micrometerRegistryPrometheus = { module = "io.micrometer:micrometer-registry-prometheus", version = "1.17.1" }
 logbackClassic = { module = "ch.qos.logback:logback-classic", version = "1.6.3" }
 logstashLogbackEncoder = { module = "net.logstash.logback:logstash-logback-encoder", version = "9.0" }
 
