@@ -4,7 +4,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 plugins {
     id("aap.conventions")
     kotlin("jvm")
-    alias(libs.plugins.ktor)
+    alias(kelvinLibs.plugins.ktor)
     application
 }
 
@@ -13,32 +13,28 @@ application {
 }
 
 dependencies {
-    implementation(libs.kafkaClients)
+    implementation(kelvinLibs.kafka.clients)
 
-    implementation(libs.ktorServerCore)
-    implementation(libs.ktorServerStatusPages)
+    implementation(kelvinLibs.ktor.server.core)
+    implementation(kelvinLibs.ktor.server.status.pages)
     implementation(libs.server)
     implementation(libs.infrastructure)
 
-    implementation(libs.jacksonDatatypeJsr310)
+    implementation(kelvinLibs.jackson.datatype.jsr310)
 
-    implementation(libs.micrometerRegistryPrometheus)
+    implementation(kelvinLibs.micrometer.prometheus)
 
-    implementation(libs.logbackClassic)
-    runtimeOnly(libs.logstashLogbackEncoder)
+    implementation(kelvinLibs.logback.classic)
+    runtimeOnly(kelvinLibs.logstash.logback.encoder)
 
-    testImplementation(libs.ktorServerTestHost)
-    testImplementation(libs.ktorClientContentNegotiation)
-    testImplementation(libs.mockOAuth2Server)
-    constraints {
-        implementation(libs.jsonSmart)
-    }
-    testImplementation(libs.assertJ)
+    testImplementation(kelvinLibs.ktor.server.test.host)
+    testImplementation(kelvinLibs.ktor.client.content.negotiation)
+    testImplementation(kelvinLibs.mock.oauth2.server)
+    testImplementation(kelvinLibs.bundles.junit)
 
-    // Testcontainers
-    testImplementation(libs.testcontainersPostgres)
-    testImplementation(libs.testcontainersJunitJupiter)
-    testImplementation(libs.testcontainersKafka)
+    testImplementation(kelvinLibs.testcontainers.postgresql)
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter:${kelvinLibs.versions.testcontainers.get()}")
+    testImplementation(kelvinLibs.testcontainers.kafka)
 }
 
 tasks {
