@@ -1,6 +1,8 @@
 [versions]
 komponenter = "2.0.186"
+kotlin = "2.4.20"
 
 [libraries]
 server = { module = "no.nav.aap.kelvin:server", version.ref = "komponenter" }
 infrastructure = { module = "no.nav.aap.kelvin:infrastructure", version.ref = "komponenter" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

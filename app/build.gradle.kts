@@ -3,7 +3,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("aap.conventions")
-    kotlin("jvm")
     alias(kelvinLibs.plugins.ktor)
     application
 }
@@ -39,7 +38,10 @@ dependencies {
 
 tasks {
     withType<ShadowJar> {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        filesMatching("META-INF/services/**") {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
         mergeServiceFiles()
     }
 }
