@@ -8,7 +8,7 @@ Applikasjon for å håndtere hendelser fra Arena som skal videre inn til felles 
 flowchart LR
     subgraph brokers["Kafka brokers<br/>Nais-pool: nav-dev / nav-prod"]
         arenaTopic[["Arena vedtak-topic<br/>teamarenanais.aapen-arena-aapvedtakendret-v1-p"]]
-        internTopic[["Intern hendelse-topic<br />api-intern-hendelse-v1"]]
+        internTopic[["Intern hendelse-topic<br />aap.api-intern-hendelse-v1"]]
         samTopic[["Samhandlings-vedtak-topic<br/>pensjonsamhandling.sam-vedtak-hendelser-p"]]
     end
 
