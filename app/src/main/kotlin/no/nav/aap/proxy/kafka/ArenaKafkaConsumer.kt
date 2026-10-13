@@ -10,6 +10,9 @@ import java.util.concurrent.TimeUnit
 
 private val logger = LoggerFactory.getLogger(ArenaKafkaConsumer::class.java)
 
+/**
+ * Dokumentasjon: https://confluence.adeo.no/spaces/ARENA/pages/419527238/Arena+-+Tjeneste+Kafka+-+L%C3%B8pende+livsoppholdsytelser
+ */
 class ArenaKafkaConsumer(
     private val arenaVedtakTopic: String,
     private val internHendelseProducer: InternHendelseProducer,
@@ -56,7 +59,7 @@ class ArenaKafkaConsumer(
     }
 
     internal fun mapToHendelse(record: ArenaVedtakRecord): AapHendelseRecord? {
-        if (record.opType == "D") return null
+        if (record.opType=="D") return null
         val vedtakData = record.after ?: return null
         return AapHendelseRecord(
             ident = vedtakData.personident,
