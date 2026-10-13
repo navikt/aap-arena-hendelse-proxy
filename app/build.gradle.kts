@@ -33,7 +33,7 @@ dependencies {
     testImplementation(kelvinLibs.bundles.junit)
 
     testImplementation(kelvinLibs.testcontainers.postgresql)
-    testImplementation("org.testcontainers:testcontainers-junit-jupiter:${kelvinLibs.versions.testcontainers.get()}")
+    testImplementation(kelvinLibs.testcontainers.junit.jupiter)
     testImplementation(kelvinLibs.testcontainers.kafka)
 }
 
