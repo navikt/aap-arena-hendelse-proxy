@@ -26,7 +26,7 @@ testing {
     }
 }
 
-val toolchainLauncher: launcherFor = javaToolchains.launcherFor {
+val toolchainLauncher = javaToolchains.launcherFor {
     languageVersion.set(JavaLanguageVersion.of(25))
 }
 
