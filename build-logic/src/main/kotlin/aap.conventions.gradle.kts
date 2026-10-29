@@ -9,9 +9,9 @@ group = "no.nav.aap.statistikk"
 version = findProperty("version") ?: "0.0.0"
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
     compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
+        jvmTarget.set(JvmTarget.JVM_25)
         apiVersion.set(KotlinVersion.KOTLIN_2_4)
         languageVersion.set(KotlinVersion.KOTLIN_2_4)
     }
@@ -27,7 +27,7 @@ testing {
 }
 
 val toolchainLauncher = javaToolchains.launcherFor {
-    languageVersion.set(JavaLanguageVersion.of(21))
+    languageVersion.set(JavaLanguageVersion.of(25))
 }
 
 tasks.withType<Test>().configureEach {
